@@ -1,0 +1,13 @@
+import urllib.request, json, traceback
+
+try:
+    req = urllib.request.Request('http://127.0.0.1:8000/auth/signup', data=json.dumps({'email': 'test14@example.com', 'password': 'password123'}).encode(), headers={'Content-Type': 'application/json'})
+    res = urllib.request.urlopen(req)
+    with open("response_log.txt", "w") as f:
+        f.write("SUCCESS\n")
+        f.write(res.read().decode())
+except Exception as e:
+    with open("response_log.txt", "w") as f:
+        f.write(str(e) + "\n")
+        if hasattr(e, "read"):
+            f.write(e.read().decode())

@@ -1,0 +1,2 @@
+HTTP Error 500: Internal Server Error
+{"detail":"An unexpected error occurred: password cannot be longer than 72 bytes, truncate manually if necessary (e.g. my_password[:72])."}

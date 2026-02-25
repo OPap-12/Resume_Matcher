@@ -1,0 +1,19 @@
+fastapi
+uvicorn[standard]
+gunicorn
+slowapi
+alembic
+pypdf
+python-multipart
+groq
+python-dotenv
+sqlalchemy
+psycopg2-binary
+
+# Optional - for vector embeddings (Phase 3)
+sentence-transformers
+faiss-cpu
+
+# Phase 3 - Auth
+python-jose[cryptography]
+passlib[bcrypt]

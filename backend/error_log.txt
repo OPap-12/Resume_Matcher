@@ -1,0 +1,2 @@
+HTTP Error 500: Internal Server Error
+{"detail":"An unexpected error occurred. Please try again later."}

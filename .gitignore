@@ -1,0 +1,15 @@
+node_modules/
+__pycache__/
+*.pyc
+backend/venv/
+.env
+.DS_Store
+dist/
+build/
+.pytest_cache/
+alembic.ini
+!backend/alembic.ini
+backend/data/
+database.db
+*.sqlite
+backend/resume_db.sqlite
