@@ -20,12 +20,17 @@ class AIService:
                 {
                     "role": "system",
                     "content": (
-                        "You are a professional resume reviewer. Output your analysis strictly in JSON format. "
-                        "The JSON should have three keys: 'strengths', 'weaknesses', and 'suggestions'. "
-                        "Each key should contain a list of 3 clear, actionable strings."
+                        "You are a professional resume reviewer. Output your analysis *strictly* in valid JSON format, "
+                        "with absolutely no markdown formatting, backticks, or other text. "
+                        "The JSON strictly MUST have this exact structure:\n"
+                        "{\n"
+                        '  "strengths": ["...", "...", "..."],\n'
+                        '  "weaknesses": ["...", "...", "..."],\n'
+                        '  "suggestions": ["...", "...", "..."]\n'
+                        "}"
                     )
                 },
-                {"role": "user", "content": resume_text},
+                {"role": "user", "content": f"Review this resume and provide the JSON output:\n{resume_text}"},
             ],
             model="llama-3.3-70b-versatile",
             response_format={"type": "json_object"},
@@ -39,13 +44,18 @@ class AIService:
                 {
                     "role": "system",
                     "content": (
-                        "Extract structured data from the resume. Output strictly in JSON format. "
-                        "Keys: 'skills' (list of technical/soft skills), 'education' (list of degrees/certifications), "
-                        "'experience' (list of job titles or roles), 'summary' (1-2 sentence professional summary). "
-                        "Use empty lists/string if not found. Be concise."
+                        "Extract structured data from the resume. Output *strictly* in valid JSON format. "
+                        "Do not include markdown or explanations. Use keys: 'skills', 'education', 'experience', 'summary'. "
+                        "The JSON must have this exact structure:\n"
+                        "{\n"
+                        '  "skills": ["...", "..."],\n'
+                        '  "education": ["...", "..."],\n'
+                        '  "experience": ["...", "..."],\n'
+                        '  "summary": "..."\n'
+                        "}"
                     )
                 },
-                {"role": "user", "content": resume_text},
+                {"role": "user", "content": f"Parse this resume into JSON:\n{resume_text}"},
             ],
             model="llama-3.3-70b-versatile",
             response_format={"type": "json_object"},
@@ -86,7 +96,15 @@ Analyze the resume against the job description. Output strictly in JSON with:
             messages=[
                 {
                     "role": "system",
-                    "content": "You are an expert resume-job matcher. Output only valid JSON.",
+                    "content": (
+                        "You are an expert resume-job matcher. Output *strictly* in valid JSON format. "
+                        "Do not include markdown. The JSON must have this exact structure:\n"
+                        "{\n"
+                        '  "match_score": 85,\n'
+                        '  "skill_gaps": ["...", "..."],\n'
+                        '  "improvement_suggestions": ["...", "..."]\n'
+                        "}"
+                    )
                 },
                 {"role": "user", "content": prompt},
             ],

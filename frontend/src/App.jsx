@@ -10,8 +10,8 @@ import {
   logoutUser,
 } from "./lib/api";
 
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
+import * as jspdfModule from "jspdf";
+import html2canvas from "html2canvas-pro";
 import AuthModal from "./components/AuthModal";
 
 function App() {
@@ -38,15 +38,26 @@ function App() {
       setShowAuthModal(true);
       return;
     }
-    const element = document.getElementById("analysis-result");
-    if (!element) return;
-    const canvas = await html2canvas(element, { scale: 2 });
-    const imgData = canvas.toDataURL("image/png");
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-    pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-    pdf.save("Resume_AI_Report.pdf");
+
+    try {
+      const element = document.getElementById("analysis-result");
+      if (!element) throw new Error("Result element not found");
+      const canvas = await html2canvas(element, { scale: 2 });
+      if (canvas.width === 0 || canvas.height === 0) {
+        throw new Error("Canvas generated with 0 size");
+      }
+      const imgData = canvas.toDataURL("image/png");
+      const JsPDFConstructor =
+        jspdfModule.jsPDF || jspdfModule.default || window.jsPDF;
+      const pdf = new JsPDFConstructor("p", "mm", "a4");
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
+      pdf.save("Resume_AI_Report.pdf");
+    } catch (err) {
+      console.error("PDF generation failed:", err);
+      alert(`Failed to generate PDF. Error details: ${err.message || err}`);
+    }
   };
 
   useEffect(() => {
