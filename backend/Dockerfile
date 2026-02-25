@@ -9,4 +9,4 @@ RUN chmod +x entrypoint.sh
 
 EXPOSE 8000
 ENTRYPOINT ["./entrypoint.sh"]
-CMD ["gunicorn", "main:app", "-w", "4", "-k", "uvicorn.workers.UvicornWorker", "-b", "0.0.0.0:8000"]
+CMD ["sh", "-c", "gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:${PORT:-8000}"]
